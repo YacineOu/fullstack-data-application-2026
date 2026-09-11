@@ -79,7 +79,7 @@ Questions à noter :
 - Que se passe-t-il si vous lancez un second `docker run --name tp0-api ...` alors que le premier
   conteneur existe encore ?
 
-Si le premier conteneur existe encore (qu'il soit en cours d'exécution ou à l'état arrêté Exited), Docker refuse de créer le second et renvoie une erreur de conflit de nom  `Error response from daemon: Conflict. The container name "/tp0-api" is already in use...`. Le nom d'un conteneur doit être strictement unique sur votre hôte Docker.Pour vérifier s'il existe déjà : Tapez docker ps -a pour voir tous les conteneurs, y compris ceux qui sont arrêtés.
+Si le premier conteneur existe encore (qu'il soit en cours d'exécution ou à l'état arrêté Exited), Docker refuse de créer le second et renvoie une erreur de conflit de nom  `Error response from daemon: Conflict. The container name "/tp0-api" is already in use...`. Le nom d'un conteneur doit être strictement unique sur votre hôte Docker.Pour vérifier s'il existe déjà : Tapez `docker ps -a` pour voir tous les conteneurs, y compris ceux qui sont arrêtés.
   
 - À quoi sert exactement `-p 8000:8000` ? Que se passe-t-il si vous changez le port côté hôte
   (`-p 9000:8000`) ?
@@ -88,7 +88,7 @@ La syntaxe de l'option -p est la suivante : `-p <PORT_HÔTE>:<PORT_CONTENEUR>.`
 
 Par défaut, le réseau du conteneur est totalement isolé de votre machine hôte. L'option `-p 8000:8000` crée une redirection de port : tout trafic arrivant sur le port 8000 de votre machine (l'hôte) est transmis au port 8000 à l'intérieur du conteneur où FastAPI écoute.
 
-Que se passe-t-il si vous mettez -p 9000:8000 ?
+Que se passe-t-il si vous mettez `-p 9000:8000` ?
 Le port interne du conteneur reste 8000, mais c'est le port 9000 de votre machine qui y est relié :
 
 Depuis votre navigateur ou terminal, http://localhost:8000 ne fonctionnera plus.
@@ -146,7 +146,10 @@ Vous entendrez souvent dire que deux conteneurs sont isolés et ne peuvent pas c
    Notez ce que vous voyez : vos deux conteneurs sont sur le **même** réseau, `bridge`, celui que
    Docker utilise par défaut. Relevez l'adresse IP de `tp0-api`, vous en aurez besoin.
 
-2. Depuis le front, essayez de joindre l'api **par son nom**. L'image ne contient pas `curl`, on
+   /tp0-api bridge=172.17.0.2
+   /tp0-front bridge=172.17.0.3
+
+3. Depuis le front, essayez de joindre l'api **par son nom**. L'image ne contient pas `curl`, on
    utilise donc `httpx`, déjà installé dans le front :
 
    ```bash
@@ -156,7 +159,7 @@ Vous entendrez souvent dire que deux conteneurs sont isolés et ne peuvent pas c
 
    Échec. Lisez le message : il parle de résolution de nom, pas de connexion refusée ni de timeout.
 
-3. Toujours depuis ce shell, réessayez **par l'adresse IP** relevée à l'étape 1 (remplacez
+4. Toujours depuis ce shell, réessayez **par l'adresse IP** relevée à l'étape 1 (remplacez
    `172.17.0.X`) :
 
    ```bash
