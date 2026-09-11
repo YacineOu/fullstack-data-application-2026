@@ -147,6 +147,7 @@ Vous entendrez souvent dire que deux conteneurs sont isolés et ne peuvent pas c
    Docker utilise par défaut. Relevez l'adresse IP de `tp0-api`, vous en aurez besoin.
 
    /tp0-api bridge=172.17.0.2
+
    /tp0-front bridge=172.17.0.3
 
 3. Depuis le front, essayez de joindre l'api **par son nom**. L'image ne contient pas `curl`, on
