@@ -78,9 +78,29 @@ Questions à noter :
 
 - Que se passe-t-il si vous lancez un second `docker run --name tp0-api ...` alors que le premier
   conteneur existe encore ?
+
+Si le premier conteneur existe encore (qu'il soit en cours d'exécution ou à l'état arrêté Exited), Docker refuse de créer le second et renvoie une erreur de conflit de nom  `Error response from daemon: Conflict. The container name "/tp0-api" is already in use...`. Le nom d'un conteneur doit être strictement unique sur votre hôte Docker.Pour vérifier s'il existe déjà : Tapez docker ps -a pour voir tous les conteneurs, y compris ceux qui sont arrêtés.
+  
 - À quoi sert exactement `-p 8000:8000` ? Que se passe-t-il si vous changez le port côté hôte
   (`-p 9000:8000`) ?
+
+La syntaxe de l'option -p est la suivante : `-p <PORT_HÔTE>:<PORT_CONTENEUR>.`
+
+Par défaut, le réseau du conteneur est totalement isolé de votre machine hôte. L'option `-p 8000:8000` crée une redirection de port : tout trafic arrivant sur le port 8000 de votre machine (l'hôte) est transmis au port 8000 à l'intérieur du conteneur où FastAPI écoute.
+
+Que se passe-t-il si vous mettez -p 9000:8000 ?
+Le port interne du conteneur reste 8000, mais c'est le port 9000 de votre machine qui y est relié :
+
+Depuis votre navigateur ou terminal, http://localhost:8000 ne fonctionnera plus.
+
+Vous devez désormais contacter http://localhost:9000.
+
+  
 - Quelle est la différence entre `docker stop` et `docker rm -f` ?
+
+La commande `docker stop tp0-api` arrête le conteneur proprement en envoyant un signal SIGTERM à son processus principal. Le conteneur passe alors à l'état Exited, mais il reste présent dans le système : ses données et ses logs sont conservés, ce qui permet de le relancer à tout moment avec docker start tp0-api.
+
+À l'inverse, la commande `docker rm -f tp0-api` force l'arrêt immédiat du conteneur en envoyant un signal SIGKILL, puis le supprime définitivement. Le conteneur et son état sont entièrement détruits et n'apparaissent plus dans `docker ps -a`. Pour le réutiliser, il faut obligatoirement en recréer un nouveau avec docker run.
 
 ## Partie 2 — Deux conteneurs qui n'arrivent pas à se parler (20 min)
 
