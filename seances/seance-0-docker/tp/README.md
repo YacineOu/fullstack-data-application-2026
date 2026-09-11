@@ -280,19 +280,19 @@ réseau, publication de port ou pas.
 
 ### Ce que vous devez pouvoir expliquer avant de passer à la suite
 
-1.Pourquoi `http://tp0-api:8000` échoue sur le réseau par défaut alors que l'IP fonctionne.
+1. Pourquoi `http://tp0-api:8000` échoue sur le réseau par défaut alors que l'IP fonctionne.
 
 Sur le réseau bridge par défaut, Docker n'active pas la résolution de noms. Le conteneur front sait techniquement où trouver l'API (le paquet réseau passe bien car ils sont sur le même sous-réseau), mais il ne sait pas traduire le mot tp0-api en une adresse IP. En revanche, lorsque vous utilisez directement l'adresse IP (172.17.0.2), le système sait immédiatement à quelle machine s'adresser sans avoir besoin de faire de recherche de nom.
 
-2.Pourquoi on ne configure jamais une application avec l'IP d'un conteneur.
+2. Pourquoi on ne configure jamais une application avec l'IP d'un conteneur.
 
 Une adresse IP de conteneur n'est absolument pas stable : elle est attribuée dynamiquement par Docker au moment du démarrage, selon les places disponibles. Si vous redémarrez vos conteneurs ou si un autre conteneur se lance entre-temps, l'IP changera. Coder une IP en dur dans une application casserait donc la communication dès le prochain redémarrage.
 
-3.Ce qu'un réseau user-defined apporte exactement (un seul mot : le DNS).
+3. Ce qu'un réseau user-defined apporte exactement (un seul mot : le DNS).
 
 Le DNS (ou serveur de noms intégré). Il permet aux conteneurs de se reconnaître et de se joindre directement en utilisant leur nom (comme tp0-api), Docker se chargeant en arrière-plan de traduire automatiquement ce nom en adresse IP, peu importe si cette IP change.
 
-4.La différence entre `-p 8000:8000` et attacher deux conteneurs au même réseau.
+4. La différence entre `-p 8000:8000` et attacher deux conteneurs au même réseau.
 
 `-p 8000:8000` sert uniquement à exposer un port du conteneur vers l'extérieur (vers votre machine hôte/navigateur).
 
