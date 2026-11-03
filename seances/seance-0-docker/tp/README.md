@@ -78,9 +78,29 @@ Questions à noter :
 
 - Que se passe-t-il si vous lancez un second `docker run --name tp0-api ...` alors que le premier
   conteneur existe encore ?
+
+Si le premier conteneur existe encore (qu'il soit en cours d'exécution ou à l'état arrêté Exited), Docker refuse de créer le second et renvoie une erreur de conflit de nom  `Error response from daemon: Conflict. The container name "/tp0-api" is already in use...`. Le nom d'un conteneur doit être strictement unique sur votre hôte Docker.Pour vérifier s'il existe déjà : Tapez `docker ps -a` pour voir tous les conteneurs, y compris ceux qui sont arrêtés.
+  
 - À quoi sert exactement `-p 8000:8000` ? Que se passe-t-il si vous changez le port côté hôte
   (`-p 9000:8000`) ?
+
+La syntaxe de l'option -p est la suivante : `-p <PORT_HÔTE>:<PORT_CONTENEUR>.`
+
+Par défaut, le réseau du conteneur est totalement isolé de votre machine hôte. L'option `-p 8000:8000` crée une redirection de port : tout trafic arrivant sur le port 8000 de votre machine (l'hôte) est transmis au port 8000 à l'intérieur du conteneur où FastAPI écoute.
+
+Que se passe-t-il si vous mettez `-p 9000:8000` ?
+Le port interne du conteneur reste 8000, mais c'est le port 9000 de votre machine qui y est relié :
+
+Depuis votre navigateur ou terminal, http://localhost:8000 ne fonctionnera plus.
+
+Vous devez désormais contacter http://localhost:9000.
+
+  
 - Quelle est la différence entre `docker stop` et `docker rm -f` ?
+
+La commande `docker stop tp0-api` arrête le conteneur proprement en envoyant un signal SIGTERM à son processus principal. Le conteneur passe alors à l'état Exited, mais il reste présent dans le système : ses données et ses logs sont conservés, ce qui permet de le relancer à tout moment avec docker start tp0-api.
+
+À l'inverse, la commande `docker rm -f tp0-api` force l'arrêt immédiat du conteneur en envoyant un signal SIGKILL, puis le supprime définitivement. Le conteneur et son état sont entièrement détruits et n'apparaissent plus dans `docker ps -a`. Pour le réutiliser, il faut obligatoirement en recréer un nouveau avec docker run.
 
 ## Partie 2 — Deux conteneurs qui n'arrivent pas à se parler (20 min)
 
@@ -126,7 +146,11 @@ Vous entendrez souvent dire que deux conteneurs sont isolés et ne peuvent pas c
    Notez ce que vous voyez : vos deux conteneurs sont sur le **même** réseau, `bridge`, celui que
    Docker utilise par défaut. Relevez l'adresse IP de `tp0-api`, vous en aurez besoin.
 
-2. Depuis le front, essayez de joindre l'api **par son nom**. L'image ne contient pas `curl`, on
+   /tp0-api bridge=172.17.0.2
+
+   /tp0-front bridge=172.17.0.3
+
+3. Depuis le front, essayez de joindre l'api **par son nom**. L'image ne contient pas `curl`, on
    utilise donc `httpx`, déjà installé dans le front :
 
    ```bash
@@ -136,7 +160,7 @@ Vous entendrez souvent dire que deux conteneurs sont isolés et ne peuvent pas c
 
    Échec. Lisez le message : il parle de résolution de nom, pas de connexion refusée ni de timeout.
 
-3. Toujours depuis ce shell, réessayez **par l'adresse IP** relevée à l'étape 1 (remplacez
+4. Toujours depuis ce shell, réessayez **par l'adresse IP** relevée à l'étape 1 (remplacez
    `172.17.0.X`) :
 
    ```bash
@@ -256,10 +280,23 @@ réseau, publication de port ou pas.
 
 ### Ce que vous devez pouvoir expliquer avant de passer à la suite
 
-- Pourquoi `http://tp0-api:8000` échoue sur le réseau par défaut alors que l'IP fonctionne.
-- Pourquoi on ne configure jamais une application avec l'IP d'un conteneur.
-- Ce qu'un réseau user-defined apporte exactement (un seul mot : le DNS).
-- La différence entre `-p 8000:8000` et attacher deux conteneurs au même réseau.
+1. Pourquoi `http://tp0-api:8000` échoue sur le réseau par défaut alors que l'IP fonctionne.
+
+Sur le réseau bridge par défaut, Docker n'active pas la résolution de noms. Le conteneur front sait techniquement où trouver l'API (le paquet réseau passe bien car ils sont sur le même sous-réseau), mais il ne sait pas traduire le mot tp0-api en une adresse IP. En revanche, lorsque vous utilisez directement l'adresse IP (172.17.0.2), le système sait immédiatement à quelle machine s'adresser sans avoir besoin de faire de recherche de nom.
+
+2. Pourquoi on ne configure jamais une application avec l'IP d'un conteneur.
+
+Une adresse IP de conteneur n'est absolument pas stable : elle est attribuée dynamiquement par Docker au moment du démarrage, selon les places disponibles. Si vous redémarrez vos conteneurs ou si un autre conteneur se lance entre-temps, l'IP changera. Coder une IP en dur dans une application casserait donc la communication dès le prochain redémarrage.
+
+3. Ce qu'un réseau user-defined apporte exactement (un seul mot : le DNS).
+
+Le DNS (ou serveur de noms intégré). Il permet aux conteneurs de se reconnaître et de se joindre directement en utilisant leur nom (comme tp0-api), Docker se chargeant en arrière-plan de traduire automatiquement ce nom en adresse IP, peu importe si cette IP change.
+
+4. La différence entre `-p 8000:8000` et attacher deux conteneurs au même réseau.
+
+`-p 8000:8000` sert uniquement à exposer un port du conteneur vers l'extérieur (vers votre machine hôte/navigateur).
+
+Être sur le même réseau permet aux conteneurs de communiquer entre eux de manière interne. Entre conteneurs, la publication d'un port (-p) n'est pas nécessaire : le trafic interne transite directement par les interfaces virtuelles du réseau Docker.
 
 ## Partie 4 — Orchestration avec Docker Compose (40 min)
 
