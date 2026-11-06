@@ -59,6 +59,11 @@ docker compose up --build
 3. modifiez le message de `/health`, sauvegardez, et rappelez la route **sans reconstruire
    l'image** : le changement est pris en compte.
 
+
+<img width="365" height="142" alt="image" src="https://github.com/user-attachments/assets/dee235e9-93f2-4547-a737-33cc2fe9de80" />
+
+
+
 Le point 3 est important. Prenez 2 minutes pour comprendre pourquoi :
 
 - le `volumes:` monte votre dossier `app/` local dans le conteneur, donc le code du conteneur est
