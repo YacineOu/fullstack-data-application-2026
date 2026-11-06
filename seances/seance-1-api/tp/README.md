@@ -111,6 +111,11 @@ Appelez à nouveau `GET /items/-1`. Regardez aussi `/docs` : la contrainte y app
 
 ---
 
+<img width="951" height="206" alt="image" src="https://github.com/user-attachments/assets/2cca8447-be7c-4d01-91b2-cdbcaf2f600a" />
+
+<img width="370" height="276" alt="image" src="https://github.com/user-attachments/assets/e7d528b2-9348-445d-93c5-6608b38486a6" />
+
+
 ## Étape 2 — Query parameters (15 min)
 
 Écrivez une route `GET /items` qui accepte :
