@@ -91,9 +91,11 @@ def get_item(item_id: int):
 
 | Requête | Code attendu | Corps |
 |---|---|---|
-| `GET /items/42` | ? | ? |
-| `GET /items/abc` | ? | ? |
-| `GET /items/-1` | ? | ? |
+| `GET /items/42` | 200 | "item_id":42 |
+| `GET /items/abc` | 422 | "detail":[{"type":"int_parsing","loc":["path","item_id"],
+                            "msg":"Input should be a valid integer, unable to 
+                            parse string as an  integer","input":"abc" |
+| `GET /items/-1` | 200 | "item_id":-1 |
 
 La dernière ligne vous pose une question : rien dans le code n'interdit un identifiant négatif.
 Corrigez avec `Path` :
