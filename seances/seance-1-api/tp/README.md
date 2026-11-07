@@ -246,6 +246,9 @@ class ItemCreate(BaseModel):
 Essayez ce comportement et gardez `extra="forbid"` : c'est le comportement que je préfère pour une API — un
 client qui envoie un champ mal orthographié doit être averti, pas ignoré.
 
+<img width="408" height="251" alt="image" src="https://github.com/user-attachments/assets/81c0bc5b-40b4-4950-b8ce-b9d440b1b01c" />
+
+
 ---
 
 ## Étape 4 — Lecture, mise à jour, suppression (25 min)
