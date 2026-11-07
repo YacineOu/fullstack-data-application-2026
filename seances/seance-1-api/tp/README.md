@@ -216,9 +216,20 @@ def create_item(payload: ItemCreate):
 **Testez depuis `/docs`** (plus rapide que curl pour un POST) :
 
 1. créez un item valide → vérifiez le code `201` et le corps renvoyé ;
+
+<img width="466" height="192" alt="image" src="https://github.com/user-attachments/assets/b417176a-5c63-48db-aee2-dd691f0105d8" />
+   
 2. créez un item avec `"titre": "ab"` → lisez attentivement le `422` ;
+
+<img width="491" height="293" alt="image" src="https://github.com/user-attachments/assets/4f850d65-b538-42d9-a2b5-e8fe8dd04455" />
+  
 3. créez un item avec `"tarif_jour": 0` → même chose ;
+
+<img width="421" height="243" alt="image" src="https://github.com/user-attachments/assets/f283a9fb-1c3e-4a1b-b4a5-bf3362bc8ad7" />
+
 4. créez un item avec un champ en trop, `"couleur": "rouge"` → que se passe-t-il ?
+
+<img width="468" height="150" alt="image" src="https://github.com/user-attachments/assets/06988410-dd59-4056-b268-6bf5d41bc6a3" />
 
 Le point 4 mérite une réponse : par défaut, Pydantic **ignore silencieusement** les champs
 inconnus. Si vous voulez les refuser explicitement :
