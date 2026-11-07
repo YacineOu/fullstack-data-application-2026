@@ -109,12 +109,11 @@ def get_item(item_id: int = Path(ge=1)):
 
 Appelez à nouveau `GET /items/-1`. Regardez aussi `/docs` : la contrainte y apparaît.
 
----
-
 <img width="951" height="206" alt="image" src="https://github.com/user-attachments/assets/2cca8447-be7c-4d01-91b2-cdbcaf2f600a" />
 
 <img width="370" height="276" alt="image" src="https://github.com/user-attachments/assets/e7d528b2-9348-445d-93c5-6608b38486a6" />
 
+---
 
 ## Étape 2 — Query parameters (15 min)
 
@@ -150,9 +149,26 @@ curl "http://localhost:8000/items?limit=5&q=velo"
 curl "http://localhost:8000/items?limit=500"      # attendu : 422
 curl "http://localhost:8000/items?disponible=oui" # que se passe-t-il ?
 ```
+<img width="372" height="148" alt="image" src="https://github.com/user-attachments/assets/5fc1474f-012e-4c47-ae17-ca6ee0f0ef7f" />
+
+<img width="422" height="152" alt="image" src="https://github.com/user-attachments/assets/aa7835b9-ed34-46d5-b65e-d76d5fe58678" />
+
+<img width="760" height="192" alt="image" src="https://github.com/user-attachments/assets/e028abb1-1432-46c0-a516-74fcbb28569e" />
+
+<img width="867" height="202" alt="image" src="https://github.com/user-attachments/assets/c54c9fdc-bdc6-4a2b-9f78-8965ddfbf928" />
+
+`disponible=oui` renvoie une erreur HTTP 422 (bool_parsing), car Pydantic ne reconnaît pas "oui" comme une valeur booléenne valide.
+
 
 La dernière : FastAPI accepte `true`, `false`, `1`, `0`, `yes`, `no`, `on`, `off` pour un booléen.
+
+<img width="418" height="157" alt="image" src="https://github.com/user-attachments/assets/1001e39f-77bf-4423-b604-8000cfd9fe7e" />
+
+
 Testez `disponible=peut-etre` pour voir l'erreur.
+
+<img width="885" height="198" alt="image" src="https://github.com/user-attachments/assets/d8aaa8ba-8a11-4289-9e4b-000e993573c0" />
+
 
 ---
 
