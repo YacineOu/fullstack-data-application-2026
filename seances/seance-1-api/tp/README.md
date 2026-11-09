@@ -263,6 +263,28 @@ Complétez le CRUD. Contraintes précises :
 | `PATCH /items/{item_id}` | `200` | Modifie seulement les champs fournis ; `404` si absent |
 | `DELETE /items/{item_id}` | `204` | Aucun corps de réponse ; `404` si absent |
 
+
+1er : 
+
+<img width="570" height="531" alt="image" src="https://github.com/user-attachments/assets/3fb2dc14-c41f-40e5-a397-98a05a1b29e7" />
+
+2eme : 
+
+<img width="807" height="171" alt="image" src="https://github.com/user-attachments/assets/d227fcd3-aa53-4d80-ae03-e08c4cb4433e" />
+
+3eme : 
+
+<img width="557" height="300" alt="image" src="https://github.com/user-attachments/assets/74ba9158-75b2-4303-8e23-98a6c5b39dac" />
+
+4eme : 
+
+<img width="562" height="347" alt="image" src="https://github.com/user-attachments/assets/fe8c4b64-4851-4c7c-b19b-3b39e1df844a" />
+
+5eme : 
+
+
+
+
 Quelques indices :
 
 ```python
