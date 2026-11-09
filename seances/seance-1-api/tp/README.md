@@ -282,8 +282,7 @@ Complétez le CRUD. Contraintes précises :
 
 5eme : 
 
-
-
+<img width="807" height="132" alt="image" src="https://github.com/user-attachments/assets/fda43b4c-4921-44b3-b81d-8dd601f3529e" />
 
 Quelques indices :
 
