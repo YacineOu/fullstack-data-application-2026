@@ -358,6 +358,8 @@ def list_items(...):
     ...
 ```
 
+<img width="572" height="31" alt="image" src="https://github.com/user-attachments/assets/fe6752ca-8148-4333-9e9f-9c7db061308f" />
+
 Attention : avec `prefix="/items"`, le chemin de la route de liste devient `""` et non `"/items"`.
 
 `main.py` se réduit à :
